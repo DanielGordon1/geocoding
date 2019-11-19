@@ -3,7 +3,16 @@ class FlatsController < ApplicationController
 
   # GET /flats
   def index
-    @flats = Flat.all
+    @flats = Flat.geocoded #returns flats with coordinates
+
+    @markers = @flats.map do |flat|
+      {
+        lat: flat.latitude,
+        lng: flat.longitude,
+        infoWindow: render_to_string(partial: "info_window", locals: { flat: flat }),
+        image_url: helpers.asset_url('logo.png')
+      }
+    end
   end
 
   # GET /flats/1
